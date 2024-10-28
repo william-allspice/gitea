@@ -24,7 +24,7 @@ import {initFindFileInRepo} from './features/repo-findfile.ts';
 import {initCommentContent, initMarkupContent} from './markup/content.ts';
 import {initPdfViewer} from './render/pdf.ts';
 
-import {initUserAuthOauth2} from './features/user-auth.ts';
+import {initUserAuthOauth2, initUserCheckAppUrl} from './features/user-auth.ts';
 import {
   initRepoIssueDue,
   initRepoIssueReferenceRepositorySearch,
@@ -98,12 +98,12 @@ initGiteaFomantic();
 initDirAuto();
 initSubmitEventPolyfill();
 
-function callInitFunctions(functions) {
+function callInitFunctions(functions: (() => any)[]) {
   // Start performance trace by accessing a URL by "https://localhost/?_ui_performance_trace=1" or "https://localhost/?key=value&_ui_performance_trace=1"
   // It is a quick check, no side effect so no need to do slow URL parsing.
   const initStart = performance.now();
   if (window.location.search.includes('_ui_performance_trace=1')) {
-    let results = [];
+    let results: {name: string, dur: number}[] = [];
     for (const func of functions) {
       const start = performance.now();
       func();
@@ -219,6 +219,7 @@ onDomReady(() => {
     initCommitStatuses,
     initCaptcha,
 
+    initUserCheckAppUrl,
     initUserAuthOauth2,
     initUserAuthWebAuthn,
     initUserAuthWebAuthnRegister,
